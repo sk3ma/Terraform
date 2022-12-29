@@ -35,6 +35,14 @@ resource "aws_instance" "clientEC2" {
   availability_zone = var.avail_zone
   associate_public_ip_address = true
   key_name = aws_key_pair.clientKEY_key_name
+  user_data = <<STOP
+    #!/usr/bin/env bash
+    sudo apt update
+    sudo apt install nginx -y
+    echo "<h1>Nginx is operational</h1>" > /usr/share/nginx/html/index.html
+    systemctl start nginx
+    systemctl enable nginx
+  STOP
   tags = {
     Name = "${var.env_prefix}-ec2"
 	Description = "Client server"
