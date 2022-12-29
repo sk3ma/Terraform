@@ -44,7 +44,7 @@ resource "aws_instance" "clientEC2" {
     sudo systemctl start docker
     sudo systemctl enable docker
     docker volume create bindmount
-    docker run --name nginx -p 8080:80 nginx
+    docker run --name nginx -p 8080:80 --mount source=bindmount,target=/container nginx
   STOP
   tags = {
     Name = "${var.env_prefix}-ec2"
