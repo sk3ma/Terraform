@@ -34,7 +34,7 @@ resource "aws_instance" "clientEC2" {
   availability_zone = var.avail_zone
   associate_public_ip_address = true
   key_name = aws_key_pair.clientKEY_key_name
-  user_data = <<STOP
+  user_data = <<-STOP
     #!/usr/bin/env bash
     sudo yum update -y
     sudo yum install docker -y
