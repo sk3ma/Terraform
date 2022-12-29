@@ -36,11 +36,15 @@ resource "aws_instance" "clientEC2" {
   key_name = aws_key_pair.clientKEY_key_name
   user_data = <<STOP
     #!/usr/bin/env bash
-    sudo apt update
-    sudo apt install nginx -y
+    mkdir -p /container
+    sudo yum update -y
+    sudo yum install nginx docker -y
+    sudo usermod -aG docker ec2-user
+    docker volume create bindmount
+    docker run --name nginx -p 8080:80 nginx
     echo "<h1>Nginx is operational</h1>" > /usr/share/nginx/html/index.html
-    systemctl start nginx
-    systemctl enable nginx
+    sudo systemctl start docker && sudo systemctl enable docker
+    sudo systemctl start nginx && sudo systemctl enable nginx
   STOP
   tags = {
     Name = "${var.env_prefix}-ec2"
