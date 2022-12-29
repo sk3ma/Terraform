@@ -8,7 +8,7 @@ resource "aws_vpc" "clientVPC" {
   cidr_block = ${var.vpc_cidr_block}
   tags = {
     Name = "${var.env_prefix}-vpc"
-	Description = "Client VPC"
+    Description = "Client VPC"
   }
 }
 
@@ -19,7 +19,7 @@ resource "aws_subnet" "clientSubnet" {
   availability_zone = ${var.avail_zone}
   tags = {
     Name = "${var.env_prefix}-subnet"
-	Description = "Client subnet"
+    Description = "Client subnet"
   }
 }
 
@@ -28,11 +28,11 @@ resource "aws_route_table" "clientRTB" {
   vpc_id = aws_vpc.clientVPC.id
   route {
     cidr_block = "0.0.0.0/0"
-	gateway_id = aws_internet_gateway.clientIGW.id
+    gateway_id = aws_internet_gateway.clientIGW.id
   }
   tags = {
     Name = "${var.env_prefix}-rtb"
-	Description = "Routing table"
+    Description = "Routing table"
   }
 }
 
@@ -41,7 +41,7 @@ resource "aws_internet_gateway" "clientIGW" {
   vpc_id = aws_vpc.clientVPC.id
   tags = {
     Name = "${var.env_prefix}-igw"
-	Description = "Internet access"
+    Description = "Internet access"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_route_table_association" "clientASC" {
   route_table_id = aws_route_table.clientRTB.id
   tags = {
     Name = "${var.env_prefix}-associate"
-	Description = "Subnet association"
+    Description = "Subnet association"
   }
 }
 
@@ -79,10 +79,10 @@ resource "aws_security_group" "clientSG" {
     to_port = 0
     protocol = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-	prefix_list_ids = []
+    prefix_list_ids = []
   }
   tags = {
     Name = "${var.env_prefix}-sg"
-	Description = "Client firewall"
+    Description = "Client firewall"
   }
 }
