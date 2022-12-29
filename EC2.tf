@@ -23,7 +23,6 @@ resource "aws_key_pair" "clientKEY" {
   key_name = "server-keypair"
   public_key = file(var.public_key_location)
 
-
 /* Defining virtual server */
 variable ec2_type {}
 
@@ -45,6 +44,6 @@ resource "aws_instance" "clientEC2" {
   STOP
   tags = {
     Name = "${var.env_prefix}-ec2"
-	Description = "Client server"
+    Description = "Client server"
   }
 }
