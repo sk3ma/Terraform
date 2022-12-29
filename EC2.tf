@@ -41,10 +41,10 @@ resource "aws_instance" "clientEC2" {
     sudo yum install nginx docker -y
     sudo usermod -aG docker ec2-user
     docker volume create bindmount
-    docker run --name nginx -p 8080:80 nginx
     echo "<h1>Nginx is operational</h1>" > /usr/share/nginx/html/index.html
     sudo systemctl start docker && sudo systemctl enable docker
     sudo systemctl start nginx && sudo systemctl enable nginx
+    docker run --name nginx -p 8080:80 nginx  
   STOP
   tags = {
     Name = "${var.env_prefix}-ec2"
