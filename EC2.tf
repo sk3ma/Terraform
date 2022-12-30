@@ -36,7 +36,6 @@ resource "aws_instance" "clientEC2" {
     #!/usr/bin/env bash
     sudo yum update -y
     sudo yum install docker -y
-    sudo usermod -aG docker ec2-user
     mkdir -p /container
     echo "<h1>Nginx is operational</h1>" > /container/index.html
     sudo systemctl start docker && sudo systemctl enable docker
