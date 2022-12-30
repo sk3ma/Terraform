@@ -34,6 +34,7 @@ resource "aws_instance" "clientEC2" {
   availability_zone = var.avail_zone
   associate_public_ip_address = true
   key_name = aws_key_pair.clientKEY_key_name
+#  user_data = file("/tmp/Packages.sh")
   user_data = <<-STOP
     #!/usr/bin/env bash
     sudo yum update -y
@@ -46,6 +47,20 @@ resource "aws_instance" "clientEC2" {
     docker volume create bindmount
     docker run --name nginx -p 8080:80 --mount source=bindmount,target=/container nginx
   STOP
+
+  /* Defining SSH connection */
+connection {
+  type = "ssh"
+  host = self.public_ip
+  user = "ec2-user"
+  private_key = file(var.private_key_path)
+}
+
+/* Defining server provisioner */
+provisioner "file" {
+  source = "Packages.sh"
+  destination = "/tmp/Packages.sh"
+}
   tags = {
     Name = "${var.env_prefix}-ec2"
     Description = "Client server"
