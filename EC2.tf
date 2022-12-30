@@ -13,8 +13,8 @@ data "aws_ami" "amazon-image" {
 }
 
 /* Defining SSH key */
-variable pubkey_path = {}
-variable prikey_path = {}
+variable pubkey_path {}
+variable prikey_path {}
 
 resource "aws_key_pair" "clientKEY" {
   key_name = "server-keypair"
