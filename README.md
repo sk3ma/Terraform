@@ -1,2 +1,2 @@
 # Terraform
-An AWS demo project
+An AWS demo project.
