@@ -3,10 +3,6 @@ data "aws_ami" "amazon-image" {
   most_recent = true
   owners = ["amazon"]
   filter {
-    name = "name"
-    values = ["amzn2-ami-hvm-*-x86_64.gp2"]
-  }
-  filter {
     name = "virtualization-type"
     values = ["hvm"]
   }
@@ -17,11 +13,11 @@ data "aws_ami" "amazon-image" {
 }
 
 /* Defining SSH key */
-variable public_key_location = {}
+variable pubkey_path = {}
 
 resource "aws_key_pair" "clientKEY" {
   key_name = "server-keypair"
-  public_key = file(var.public_key_location)
+  public_key = file(var.pubkey_path)
 
 /* Defining virtual server */
 variable ec2_type {}
@@ -48,12 +44,12 @@ resource "aws_instance" "clientEC2" {
     docker run --name nginx -p 8080:80 --mount source=bindmount,target=/container nginx
   STOP
 
-  /* Defining SSH connection */
+/* Defining SSH connection */
 connection {
   type = "ssh"
   host = self.public_ip
   user = "ec2-user"
-  private_key = file(var.private_key_path)
+  private_key = file(var.prikey_path)
 }
 
 /* Defining server provisioner */
