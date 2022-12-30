@@ -39,10 +39,9 @@ resource "aws_instance" "clientEC2" {
     sudo usermod -aG docker ec2-user
     mkdir -p /container
     echo "<h1>Nginx is operational</h1>" > /container/index.html
-    sudo systemctl start docker
-    sudo systemctl enable docker
-    docker volume create bindmount
-    docker run --name nginx -p 8080:80 --mount source=bindmount,target=/container nginx
+    sudo systemctl start docker && sudo systemctl enable docker
+    sudo docker volume create bindmount
+    sudo docker run --name nginx -p 8080:80 --mount source=bindmount,target=/container nginx
   STOP
 
 /* Defining SSH connection */
