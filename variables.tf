@@ -26,7 +26,7 @@ variable "instance" {
 variable "ami" {
   type        = string
   description = "AMI ID for Ubuntu 20.04 Ireland"
-  default     = "00463ddd1036a8eb6"
+  default     = "ami-066841d983164f7f6"
 }
 
 variable "vpc_cidr" {
