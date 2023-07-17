@@ -25,6 +25,6 @@ variable "ami_id" {
 
 variable "number_of_instances" {
   type        = string
-  description = "number of instances to be created"
+  description = "Number of instances to be created"
   default     = 1
 }
