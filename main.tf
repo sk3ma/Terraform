@@ -35,7 +35,7 @@ resource "aws_instance" "ec2" {
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   associate_public_ip_address = true
   tags = {
-    Name        = "My_EC2"
+    Name        = "var.instance_name"
     Description = "EC2 virtual server"
   }
 }
