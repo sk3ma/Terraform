@@ -1,4 +1,16 @@
 /* Defining AWS provider */
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.18.0"
+    }
+  }
+
+  backend "http" {
+  }
+}
+
 provider "aws" {
   shared_config_files      = ["/home/levon/.aws/config"]
   shared_credentials_files = ["/home/levon/.aws//credentials"]
