@@ -20,9 +20,9 @@ provider "aws" {
 
 /* AWS EC2 resource */
 resource "aws_instance" "terraformec2" {
-  ami                         = "${var.ami_id}"
-  count                       = "${var.number_of_instances}"
-  instance_type               = "${var.instance_type}"
+  ami                         = "var.ami_id"
+  count                       = "var.number_of_instances"
+  instance_type               = "var.instance_type"
   key_name                    = "mykeypair"
   user_data = <<STOP
     #! /bin/bash
