@@ -1,4 +1,10 @@
 /* Defining resource variables */
+variable "region" {
+  type        = string
+  description = "AWS region"
+  default     = "eu-west-1"
+}
+
 variable "instance_name" {
   type        = string
   description = "Name of the EC2 instance"
