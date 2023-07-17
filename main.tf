@@ -14,7 +14,7 @@ terraform {
 provider "aws" {
   shared_credentials_file = "/home/levon/.aws/credentials"
   profile                 = "default"
-  region                  = "eu-west-1"
+  region                  = var.region
 }
 
 /* AWS EC2 resource */
