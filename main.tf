@@ -53,35 +53,35 @@ resource "aws_vpc" "terraform_vpc" {
 
 /* Defining network component */
 resource "aws_subnet" "terraform_public_subnet" {
-    vpc_id            = aws_vpc.terraform_vpc.id
-    cidr_block        = "10.0.1.0/24"
-    availability_zone = "eu-west-1a"
+  vpc_id            = aws_vpc.terraform_vpc.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "eu-west-1a"
 
-    tags = {
-      Name = "VPC_public"
+  tags = {
+    Name = "VPC_public"
   }
 }
 
 resource "aws_subnet" "terraform_private_subnet" {
-    vpc_id            = aws_vpc.terraform_vpc.id
-    cidr_block        = "10.0.2.0/24"
-    availability_zone = "eu-west-1a"
+  vpc_id            = aws_vpc.terraform_vpc.id
+  cidr_block        = "10.0.2.0/24"
+  availability_zone = "eu-west-1a"
 
-    tags = {
-      Name = "VPC_private"
+  tags = {
+    Name = "VPC_private"
   }
 }
 
 resource "aws_internet_gateway" "terraform_ig" {
-    vpc_id = aws_vpc.terraform_vpc.id
+  vpc_id = aws_vpc.terraform_vpc.id
 
-    tags = {
-      Name = "VPC_IGW"
+  tags = {
+    Name = "VPC_IGW"
   }
 }
 
 resource "aws_route_table" "terraform_public_rt" {
-    vpc_id = aws_vpc.terraform_vpc.id
+  vpc_id = aws_vpc.terraform_vpc.id
 
     route {
       cidr_block = "0.0.0.0/0"
@@ -99,8 +99,8 @@ resource "aws_route_table" "terraform_public_rt" {
 }
 
 resource "aws_route_table_association" "terraform_public_1_rt_a" {
-    subnet_id      = aws_subnet.terraform_public_subnet.id
-    route_table_id = aws_route_table.terraform_public_rt.id
+  subnet_id      = aws_subnet.terraform_public_subnet.id
+  route_table_id = aws_route_table.terraform_public_rt.id
 }
 
 /* Defining firewall component */
