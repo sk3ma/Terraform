@@ -43,9 +43,9 @@ resource "aws_instance" "terraformec2" {
 
 /* AWS VPC resource */
 resource "aws_vpc" "terraform_vpc" {
-    cidr_block = "10.0.0.0/16"
+  cidr_block = "10.0.0.0/16"
 
-    tags = {
+  tags = {
       Name = "My_VPC"
       Description = "EC2 custom VPC"
   }
