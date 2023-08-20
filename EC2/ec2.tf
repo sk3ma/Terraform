@@ -3,6 +3,7 @@ resource "aws_instance" "ec2_instance" {
   ami           = var.ami
   instance_type = var.instance
   key_name      = aws_key_pair.ec2_ssh_key.key_name
+#  user_data = file("Packages.sh")
   user_data     = <<-STOP
     #!/bin/bash
     sudo apt update
