@@ -32,14 +32,25 @@ jobs:
         with:
           terraform_version: 1.0.0
 
-      - name: Terraform initialize
-        run: terraform init
-        working-directory: terraform
+      - name: Validate Terraform
+        run: terraform validate
 
-      - name: Terraform format
+      - name: Format code
         run: terraform fmt -check
 
+      - name: Validate code
+        id: check
+        run: echo "Checks passed"
+
+      - name: initialize Terraform
+        if: success() && steps.check.outcome == 'success'
+        run: terraform init
+
+      - name: Terraform plan
+        if: success() && steps.check.outcome == 'success'
+        run: terraform plan -out=tfplan
+
       - name: Terraform apply
-        if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+        if: success() && steps.check.outcome == 'success'
+        run: terraform apply tfplan -auto-approve
         working-directory: terraform
