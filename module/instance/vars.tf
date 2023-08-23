@@ -32,5 +32,5 @@ variable "bucket" {
 variable "key" {
   type        = string
   description = "S3 bucket for storing state file"
-  default     = "path/to/instance/terraform.tfstate"
+  default     = "playground/terraform.tfstate"
 }
