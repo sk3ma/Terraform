@@ -5,7 +5,7 @@ resource "aws_instance" "wordpress" {
   instance_type               = var.instance_type
   key_name                    = "keypair"
   subnet_id                   = aws_subnet._public_subnet.id
-  security_groups_ids         = [aws_security_group.sg.id]
+  security_groups_ids         = [aws_security_group.secgrp.id]
   associate_public_ip_address = true
   user_data                   = file("userdata.tpl")
 
