@@ -18,3 +18,4 @@ sudo systemctl enable apache2
 sudo wget --progress=bar:force -P /tmp https://wordpress.org/latest.zip
 sudo unzip /tmp/latest.zip -d /var/www/html
 sudo systemctl restart apache2
+exit
