@@ -3,7 +3,7 @@ resource "aws_instance" "wordpress" {
   ami                         = var.ami
   count                       = var.number_of_instances
   instance_type               = var.instance_type
-  key_name                    = "keypair"
+  key_name                    = "my_ssh"
   subnet_id                   = aws_subnet._public_subnet.id
   security_groups_ids         = [aws_security_group.secgrp.id]
   associate_public_ip_address = true
