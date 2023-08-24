@@ -18,6 +18,6 @@ resource "aws_db_instance" "wpdb" {
   multi_az               = false
   storage_encrypted      = true
   db_subnet_group_name   = aws_db_subnet_group.mysql.name
-  vpc_security_group_ids = [aws_security_group._sg.id]
+  security_group_ids = [aws_security_group._sg.id]
   skip_final_snapshot    = true
 }
