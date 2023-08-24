@@ -13,6 +13,7 @@ sudo apt install php8.1-{xml,fpm,mysql,zipgd,cli,mbstring,pgsql,cgi} -y
 echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 sudo systemctl start apache2
 sudo systemctl enable apache2
+
 # Installing Wordpress.
 sudo wget --progress=bar:force -P /tmp https://wordpress.org/latest.zip
 sudo unzip /tmp/latest.zip -d /var/www/html
