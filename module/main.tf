@@ -22,7 +22,7 @@ module "network" {
   source = "./network"
 
 /* VPC module variables */
-  availability_zone = eu-west-1a"
   aws_region        = "eu-west-1"
+  availability_zone = "eu-west-1a"
   aws_profile       = "playground"
 }
