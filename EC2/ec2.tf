@@ -16,3 +16,25 @@ resource "aws_instance" "ec2_instance" {
     Name = "EC2Instance"
   }
 }
+
+# /* Ansible playbook provisioner */
+# provider "null" {}
+# 
+# resource "null_resource" "ansible" {
+#   triggers = {
+#     timestamp = timestamp()
+#   }
+# 
+#   provisioner "local-exec" {
+#     command = "echo 'Running Ansible provisioner'"
+#   }
+# 
+#   provisioner "ansible" {
+#     playbook_file = "./playbooks/nginx-install.yml"
+#   }
+# 
+#   provisioner "ansible" {
+#     depends_on    = [null_resource.ansible[1]]
+#     playbook_file = "./playbooks/nginx-configure.yml"
+#   }
+# }
