@@ -20,62 +20,56 @@ NAME=zabbix_db
 USER=zabbix_user
 PASS=y5VgWsOK
 
-# Sanity checking.
-if [[ ${USERID} -ne "0" ]]; then
-    echo -e "\e[31;1;3mYou must be root, exiting.\e[m"
-    exit 1
-fi
-
 # Creating directory.
 if ! [[ -d "/srv/scripts" ]]; then 
-    mkdir -vp "/srv/scripts"
-    chmod -vR 775 "/srv/scripts"
+    sudo mkdir -vp "/srv/scripts"
+    sudo chmod -vR 775 "/srv/scripts"
 fi
 
 # Apache installation.
 web() {
-    echo -e "\e[96;1;3mDistribution: ${DISTRO}\e[m"
-    echo -e "\e[32;1;3mInstalling Apache\e[m"
-    apt update
-    apt install apache2 apache2-utils -qy
-    systemctl start apache2
-    systemctl enable apache2
-    echo "<h1>Apache is operational</h1>" > /var/www/html/index.html
+    echo -e "\e[96;1;3m[OK] Distribution: ${DISTRO}\e[m"
+    echo -e "\e[32;1;3m[INFO] Installing Apache\e[m"
+    sudo apt update
+    sudo apt install apache2 apache2-utils -qy
+    sudo systemctl start apache2
+    sudo systemctl enable apache2
+    echo "<h1>Apache is operational</h1>" | sudo tee /var/www/html/index.html
 }
 
 # PHP installation.
 php() {
-    echo -e "\e[32;1;3mInstalling PHP\e[m"
-    apt install libapache2-mod-php7.4 php7.4 php7.4-{cli,curl,common,dev,fpm,gd,mbstring,mysqlnd} -qy
-    echo "<?php phpinfo(); ?>" > /var/www/html/info.php
+    echo -e "\e[32;1;3m[INFO] Installing PHP\e[m"
+    sudo apt install libapache2-mod-php7.4 php7.4 php7.4-{cli,curl,common,dev,fpm,gd,mbstring,mysqlnd} -qy
+    echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
 }
 
 # MariaDB installation.
 mariadb() {
-    echo -e "\e[32;1;3mInstalling MariaDB\e[m"
-    apt install software-properties-common curl -qy
+    echo -e "\e[32;1;3m[INFO] Installing MariaDB\e[m"
+    sudo apt install software-properties-common curl -qy
     cd /opt
     curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
-    bash mariadb_repo_setup --mariadb-server-version=10.6
-    apt update
-    apt install mariadb-server-10.6 mariadb-client-10.6 mariadb-common pv -qy
-    systemctl start mariadb
-    systemctl enable mariadb
+    sudo bash mariadb_repo_setup --mariadb-server-version=10.6
+    sudo apt update
+    sudo apt install mariadb-server-10.6 mariadb-client-10.6 mariadb-common pv -qy
+    sudo systemctl start mariadb
+    sudo systemctl enable mariadb
     rm -f mariadb_repo_setup
 }
 
 # Zabbix database.
 data() {
-    echo -e "\e[32;1;3mConfiguring MariaDB\e[m"
+    echo -e "\e[32;1;3m[INFO] Configuring MariaDB\e[m"
     local dbase=$(cat << STOP
 CREATE DATABASE zabbix_db character set utf8 collate utf8_bin;
 CREATE USER 'zabbix_user'@'%' IDENTIFIED by 'y5VgWsOK';
 GRANT ALL PRIVILEGES ON zabbix_db.* TO 'zabbix_user'@'%';
 STOP
 )
-    echo "${dbase}" > /var/www/html/zabbix_db.sql
+    echo "${dbase}" | sudo tee /var/www/html/zabbix_db.sql
     cat << STOP > /tmp/answer.txt
-echo | "enter"
+enter
 y
 y
 zuA_IWj5
@@ -85,21 +79,21 @@ y
 y
 y
 STOP
-   mysql_secure_installation < /tmp/answer.txt
-   echo -e "\e[32;1;3mImporting database\e[m"
+   sudo mysql_secure_installation < /tmp/answer.txt
+   echo -e "\e[32;1;3m[INFO] Importing database\e[m"
    mysql -u root -pzuA_IWj5 < /var/www/html/zabbix_db.sql | pv
 }
 
 # Zabbix installation.
 zabbix() {
-    echo -e "\e[32;1;3mDownloading Zabbix\e[m"
+    echo -e "\e[32;1;3m[INFO] Downloading Zabbix\e[m"
     cd /opt
-    wget --progress=bar:force https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-3+ubuntu20.04_all.deb
-    dpkg -i zabbix-release_6.0-3+ubuntu20.04_all.deb
-    echo -e "\e[32;1;3mConfiguring repository\e[m"
+    sudo wget --progress=bar:force https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-3+ubuntu20.04_all.deb
+    sudo dpkg -i zabbix-release_6.0-3+ubuntu20.04_all.deb
+    echo -e "\e[32;1;3m[INFO] Configuring repository\e[m"
     cd /etc/apt
-    cp sources.{list,orig}
-    rm -f sources.list
+    sudo cp sources.{list,orig}
+    sudo rm -f sources.list
     local source=$(cat << STOP
 deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse
 deb-src http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse
@@ -113,36 +107,36 @@ deb http://archive.canonical.com/ubuntu focal partner
 deb-src http://archive.canonical.com/ubuntu focal partner
 STOP
 )
-    echo "${source}" > sources.list
-    echo -e "\e[32;1;3mInstalling Zabbix\e[m"
-    cp /etc/apt/sources.list.d/zabbix.{list,orig}
-    rm -f /etc/apt/sources.list.d/zabbix.list
+    echo "${source}" | sudo tee sources.list
+    echo -e "\e[32;1;3m[INFO] Installing Zabbix\e[m"
+    sudo cp /etc/apt/sources.list.d/zabbix.{list,orig}
+    sudo rm -f /etc/apt/sources.list.d/zabbix.list
     local list=$(cat << STOP
 deb [arch=amd64] http://repo.zabbix.com/zabbix/6.0/ubuntu focal main
 deb-src [arch=amd64] http://repo.zabbix.com/zabbix/6.0/ubuntu focal main
 STOP
 )
-    echo "${list}" > /etc/apt/sources.list.d/zabbix.list
-    apt update
-    apt install zabbix-agent zabbix-server-mysql php-mysql zabbix-frontend-php zabbix-sql-scripts zabbix-apache-conf -qy
-    systemctl start zabbix-server zabbix-agent
-    systemctl enable zabbix-server zabbix-agent
-    rm -f zabbix-release_6.0-3+ubuntu20.04_all.deb
+    echo "${list}" | sudo tee /etc/apt/sources.list.d/zabbix.list
+    sudo apt update
+    sudo apt install zabbix-agent zabbix-server-mysql php-mysql zabbix-frontend-php zabbix-sql-scripts zabbix-apache-conf -qy
+    sudo systemctl start zabbix-server zabbix-agent
+    sudo systemctl enable zabbix-server zabbix-agent
+    sudo rm -f zabbix-release_6.0-3+ubuntu20.04_all.deb
 }
 
 # Importing scripts.
 scripts() {
-    echo -e "\e[32;1;3mImporting Zabbix scripts\e[m"
+    echo -e "\e[32;1;3m[INFO] Importing Zabbix scripts\e[m"
     zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u zabbix_user -py5VgWsOK zabbix_db
 }
 
 # Configuring server.
 config() {
-    echo -e "\e[32;1;3mConfiguring Zabbix\e[m"
+    echo -e "\e[32;1;3m[INFO] Configuring Zabbix\e[m"
     cd /etc/zabbix
-    cp zabbix_server.conf zabbix_zabbix_server.orig-${DATE}
-    rm -f zabbix_server.conf
-    tee zabbix_server.conf << STOP
+    sudo cp zabbix_server.conf zabbix_zabbix_server.orig-${DATE}
+    sudo rm -f zabbix_server.conf
+    tee zabbix_server.conf << STOP > /dev/null
 ListenPort=${PORT}
 LogFile=${ZLOG}
 LogFileSize=0
@@ -181,10 +175,10 @@ STOP
 
 # Restarting services.
 reload() {
-    echo -e "\e[32;1;3mRestarting services\e[m"
-    systemctl restart apache2
-    systemctl restart zabbix-server
-    echo -e "\e[33;1;3;5mFinished, configure Zabbix server.\e[m"
+    echo -e "\e[32;1;3m[INFO] Restarting services\e[m"
+    sudo systemctl restart apache2
+    sudo systemctl restart zabbix-server
+    echo -e "\e[33;1;3;5m[OK] Finished, configure Zabbix server.\e[m"
     exit
 }
 
