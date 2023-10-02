@@ -14,7 +14,7 @@ variable "profile" {
 variable "instance_name" {
   description = "EC2 instance name"
   type        = string
-  default     = "wordpress_ec2"
+  default     = "ec2"
 }
 
 variable "instance_type" {
@@ -30,25 +30,25 @@ variable "instance_class" {
 }
 
 variable "ami" {
-  description = "The Ireland Ubuntu AMI"
+  description = "Ubuntu Ireland AMI"
   type        = string
   default     = "ami-066841d983164f7f6"
 }
 
 variable "db_name" {
-  description = "The Wordpress database name"
+  description = "The MySQL database name"
   type        = string
-  default     = "wordpress_db"
+  default     = "test_db"
 }
 
 variable "db_user" {
-  description = "The Wordpress username"
+  description = "The MySQL username"
   type        = string
   default     = "admin"
 }
 
 variable "db_password" {
-  description = "The Wordpress password"
+  description = "The MySQL password"
   type        = string
   default     = "1q2w3e4r5t"
 }
