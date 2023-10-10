@@ -64,11 +64,11 @@ data() {
     local dbase=$(cat << STOP
 CREATE DATABASE zabbix_db character set utf8 collate utf8_bin;
 CREATE USER 'zabbix_usr'@'%' IDENTIFIED by 'RV6OPNY=';
-GRANT ALL PRIVILEGES ON zabbix_db.* TO 'zabbix_user'@'%';
+GRANT ALL PRIVILEGES ON zabbix_db.* TO 'zabbix_usr'@'%';
 STOP
 )
     echo "${dbase}" | sudo tee /var/www/html/zabbix_db.sql
-    cat << STOP > /tmp/answer.txt
+    cat << STOP > /tmp/silent.txt
 enter
 y
 y
@@ -79,7 +79,7 @@ y
 y
 y
 STOP
-   sudo mysql_secure_installation < /tmp/answer.txt
+   sudo mysql_secure_installation < /tmp/silent.txt
    echo -e "\e[32;1;3m[INFO] Importing database\e[m"
    mysql -u root -pzuA_IWj5 < /var/www/html/zabbix_db.sql | pv
 }
@@ -124,9 +124,9 @@ STOP
     sudo rm -f zabbix-release_6.0-3+ubuntu20.04_all.deb
 }
 
-# Importing scripts.
+# Importing schema.
 scripts() {
-    echo -e "\e[32;1;3m[INFO] Importing Zabbix scripts\e[m"
+    echo -e "\e[32;1;3m[INFO] Importing schema\e[m"
     zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u zabbix_usr -pRV6OPNY= zabbix_db
 }
 
@@ -178,7 +178,7 @@ reload() {
     echo -e "\e[32;1;3m[INFO] Restarting services\e[m"
     sudo systemctl restart apache2
     sudo systemctl restart zabbix-server
-    echo -e "\e[33;1;3;5m[OK] Finished, configure Zabbix server.\e[m"
+    echo -e "\e[33;1;3;5m[OK] Finished, istallation complete\e[m"
 }
 
 # Defining function.
