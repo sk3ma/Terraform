@@ -17,8 +17,8 @@ PATH2=/usr/lib/zabbix/externalscripts
 PORT=10051
 HOST=localhost
 NAME=zabbix_db
-USER=zabbix_user
-PASS=y5VgWsOK
+USER=zabbix_usr
+PASS=RV6OPNY=
 
 # Creating directory.
 if ! [[ -d "/srv/scripts" ]]; then 
@@ -63,7 +63,7 @@ data() {
     echo -e "\e[32;1;3m[INFO] Configuring MariaDB\e[m"
     local dbase=$(cat << STOP
 CREATE DATABASE zabbix_db character set utf8 collate utf8_bin;
-CREATE USER 'zabbix_user'@'%' IDENTIFIED by 'y5VgWsOK';
+CREATE USER 'zabbix_usr'@'%' IDENTIFIED by 'RV6OPNY=';
 GRANT ALL PRIVILEGES ON zabbix_db.* TO 'zabbix_user'@'%';
 STOP
 )
@@ -127,7 +127,7 @@ STOP
 # Importing scripts.
 scripts() {
     echo -e "\e[32;1;3m[INFO] Importing Zabbix scripts\e[m"
-    zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u zabbix_user -py5VgWsOK zabbix_db
+    zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u zabbix_usr -pRV6OPNY= zabbix_db
 }
 
 # Configuring server.
@@ -179,7 +179,6 @@ reload() {
     sudo systemctl restart apache2
     sudo systemctl restart zabbix-server
     echo -e "\e[33;1;3;5m[OK] Finished, configure Zabbix server.\e[m"
-    exit
 }
 
 # Defining function.
@@ -192,6 +191,7 @@ main() {
     scripts
     config
     reload
+    exit
 }
 
 # Calling function.
