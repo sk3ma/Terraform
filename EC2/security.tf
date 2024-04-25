@@ -1,16 +1,17 @@
+/* Defining firewall rules */
 resource "aws_security_group" "sec_group" {
   name        = "ec2_security_group"
-  description = "Allow inbound traffic on ports 80 and 443"
-  vpc_id = aws_vpc.main.id
+  description = "Allow inbound traffic"
+  vpc_id      = aws_vpc.main.id
 
   dynamic "ingress" {
-    for_each = ["80, 443, 8080, 8443"]
+    for_each = [80, 443, 8443]
     content {
       description = "Allow EC2 traffic"
-      from_port   = ingress.value
-      to_port     = ingress.value
+      from_port   = tonumber(ingress.key)
+      to_port     = tonumber(ingress.key)
       protocol    = "tcp"
-      cidr_clocks = ["0.0.0.0/0"]
+      cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -19,7 +20,7 @@ resource "aws_security_group" "sec_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_clocks = ["10.0.0.0/16"]
+    cidr_blocks = ["41.59.72.123/32"]
 }
 
   egress {
@@ -31,6 +32,6 @@ resource "aws_security_group" "sec_group" {
   }
 
   tags = {
-    Name = "secgrp"
+    Name = "MySecgrp"
   }
 }
